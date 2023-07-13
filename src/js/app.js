@@ -22,6 +22,9 @@ import "../style/index.css";
         city: null
     }
  */
+
+const rrss = ["twitter", "github", "linkedin", "instagram"];
+
 function render(variables = {}) {
   console.log("These are the current variables: ", variables); //print on the console
   // here we ask the logical questions to make decisions on how to build the html
@@ -29,18 +32,32 @@ function render(variables = {}) {
   let cover = `<div class="cover"><img src="${variables.background}" /></div>`;
   if (variables.includeCover == false) cover = "<div class='cover'></div>";
 
+  let fullName = `<h1>${variables.name || ""} ${variables.lastname || ""}</h1>`;
+  if (variables.name == null && variables.lastname == null)
+    fullName = `<h1>Your Full Name is?</h1>`;
+
+  let userFrom = `<h3>${variables.city || ""}, ${variables.country || ""}</h3>`;
+
+  if (variables.city == null && variables.country == null)
+    userFrom = `<h3>Where do you live?</h3>`;
+
+  let redesSociales = `${rrss
+    .map(
+      red => `
+  <li><a href="https://${red}.com/${variables[red]}"><i class="fab fa-${red}"></i></a></li>
+  `
+    )
+    .join("")}`;
+
   // reset the website body with the new html output
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
           <img src="${variables.avatarURL}" class="photo" />
-          <h1>Lucy Boilett</h1>
-          <h2>Web Developer</h2>
-          <h3>Miami, USA</h3>
-          <ul class="position-right">
-            <li><a href="https://twitter.com/4geeksacademy"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="https://github.com/4geeksacademy"><i class="fab fa-github"></i></a></li>
-            <li><a href="https://linkedin.com/4geeksacademy"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="https://instagram.com/4geeksacademy"><i class="fab fa-instagram"></i></a></li>
+          ${fullName}
+          <h2>${variables.role || "Your Role?"}</h2>
+          ${userFrom}
+          <ul class="${variables.socialMediaPosition}">
+          ${redesSociales}
           </ul>
         </div>
     `;
